@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millymill shop - แบบฟอร์มสั่งซื้อสินค้า</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Noto Sans Lao & Thai Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', 'Noto Sans Lao', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* บังคับขนาดตัวอักษร input, select, textarea ให้มีความใหญ่ขั้นต่ำ 16px */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+        .animate-pop {
+            animation: pop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes pop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen pb-12 antialiased">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white sticky top-0 z-40 shadow-lg">
+        <div class="max-w-md mx-auto px-4 py-3.5 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/20 p-2 rounded-2xl w-11 h-11 flex items-center justify-center font-bold text-amber-300 text-xl border border-white/30 shadow-inner">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide flex items-center gap-1.5">
+                        Millymill shop
+                    </h1>
+                    <p class="text-xs text-emerald-100 font-light">สั่งซื้อง่าย ส่งไว ได้ของชัวร์</p>
+                </div>
+            </div>
+            <button onclick="resetCart()" class="text-xs bg-white/15 hover:bg-white/25 active:scale-95 text-white font-medium px-3 py-1.5 rounded-xl border border-white/20 transition flex items-center gap-1">
+                <i class="fas fa-rotate-left text-xs"></i> ล้างรายการ
+            </button>
+        </div>
+    </header>
+
+    <!-- STOREFRONT & ORDER FORM -->
+    <main class="max-w-md mx-auto px-4 pt-4 space-y-4">
+
+        <!-- Banner Alert -->
+        <div class="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-3.5 flex items-center gap-3 text-sm text-emerald-900 shadow-sm">
+            <div class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                <i class="fas fa-store text-base"></i>
+            </div>
+            <p class="leading-relaxed">ยินดีต้อนรับสู่ <b class="text-emerald-700">Millymill shop</b> เลือกสินค้า และกรอกข้อมูลจัดส่งด้านล่างเพื่อสั่งซื้อได้ทันทีครับ</p>
+        </div>
+
+        <!-- Step 1: Select Products -->
+        <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+            <div class="flex items-center justify-between mb-3.5 border-b pb-2.5">
+                <h2 class="font-bold text-slate-800 flex items-center text-base">
+                    <span class="bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2 font-bold shadow-sm">1</span>
+                    เลือกรายการสินค้า
+                </h2>
+                <div class="flex items-center gap-2">
+                    <span id="cart-item-count" class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-1 rounded-full border border-emerald-200">
+                        เลือกแล้ว 0 รายการ
+                    </span>
+                </div>
+            </div>
+
+            <!-- Product List Grid -->
+            <div id="product-list" class="space-y-3">
+                <!-- Products rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- Step 2: Customer Details -->
+        <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+            <div class="flex items-center mb-3.5 border-b pb-2.5">
+                <h2 class="font-bold text-slate-800 flex items-center text-base">
+                    <span class="bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2 font-bold shadow-sm">2</span>
+                    ข้อมูลจัดส่งสินค้า
+                </h2>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">ชื่อ - นามสกุล ผู้รับ <span class="text-rose-500">*</span></label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="far fa-user text-base"></i></span>
+                        <input type="text" id="cust-name" required placeholder="ป้อนชื่อ-นามสกุลผู้รับ" class="w-full pl-10 pr-3.5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition text-base">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">
+                        เบอร์โทรศัพท์ติดต่อ <span class="text-rose-500">*</span> 
+                        <span class="text-xs text-rose-600 font-normal ml-1">(กรุณาใส่เบอร์โทรให้ถูกต้อง)</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400"><i class="fas fa-phone-alt text-sm"></i></span>
+                        <input type="tel" id="cust-phone" required placeholder="เช่น 0201234567" class="w-full pl-10 pr-3.5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition text-base">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">
+                        บริษัทขนส่ง / สาขาผู้รับ <span class="text-rose-500">*</span> 
+                        <span class="text-xs text-rose-600 font-normal ml-1">(ระบุสาขาให้ถูกต้องสาขาใกล้บ้าน)</span>
+                    </label>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <select id="transport-select" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none font-semibold text-slate-700 text-base">
+                            <option value="ອານຸສິດ">🚚 ອານຸສິດ (Anousith)</option>
+                            <option value="ຮຸ່ງອາລຸ່ນ">🚚 ຮຸ່ງອາລຸ່ນ (HAL Logistics)</option>
+                        </select>
+                        <input type="text" id="cust-branch" required placeholder="ระบุสาขา ให้ถูกต้องสาขาใกล้บ้าน" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition text-base">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Payment & QR Code Section -->
+        <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+            <div class="flex items-center justify-between mb-3 border-b pb-2.5">
+                <h2 class="font-bold text-slate-800 flex items-center text-base">
+                    <span class="bg-emerald-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2 font-bold shadow-sm">3</span>
+                    ชำระเงินสแกน QR Code
+                </h2>
+                <span class="text-xs text-red-600 font-bold flex items-center gap-1">
+                    <i class="fas fa-qrcode"></i> BCEL OnePay
+                </span>
+            </div>
+
+            <!-- Full-width QR Code Box -->
+            <div class="bg-slate-50 p-4 rounded-2xl text-center border border-slate-200 mb-3">
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 w-full max-w-xs mx-auto">
+                    <img id="qr-code-img" src="https://i.ibb.co/nNpM2QgW/C68-CA38-C-F810-44-A1-BC64-7-A5745021-F14.jpg" alt="BCEL OnePay QR Code" class="w-full h-auto mx-auto rounded-xl object-contain shadow-sm">
+                    <p class="text-xs text-slate-600 mt-2 font-bold">บัญชีผู้รับ: ⭐ Millymill shop ⭐</p>
+                </div>
+            </div>
+
+            <!-- Warning Notice Message -->
+            <div class="bg-amber-50/90 border border-amber-300 rounded-2xl p-3.5 text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm">
+                <i class="fas fa-exclamation-triangle text-amber-500 text-base mt-0.5 shrink-0"></i>
+                <div class="text-slate-800">
+                    <span class="text-amber-700 font-bold">ถ้าลูกค้าเลือกสินค้าครบแล้วกรุณาสแกนจ่ายตามยอดรวมจำนวนเงินลูกค้าชำระแล้ว </span>
+                    <span class="text-rose-600 font-extrabold">กรุณาบันทึกหรือแคปสลิปการโอนไว้ถ้าไม่มีสลิปการโอนเราจะไม่จัดส่งสินค้าเด็ดขาด</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grand Total Section -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-4 rounded-2xl shadow-lg border border-slate-700/50">
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="text-base font-bold text-emerald-400 block tracking-wide">ยอดรวมทั้งสิ้น</span>
+                </div>
+                <span id="grand-total-text" class="text-2xl font-black text-emerald-400 tracking-tight">0 ₭</span>
+            </div>
+        </section>
+
+        <!-- Submit & Actions -->
+        <div class="space-y-2 pt-1">
+            <button onclick="submitOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2.5 text-base transition transform active:scale-[0.98]">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span>ส่งข้อมูลให้ร้านค้าเพื่อจัดส่ง</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- WhatsApp Redirect Instruction Modal -->
+    <div id="action-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-5 max-w-sm w-full text-center space-y-4 animate-pop shadow-2xl border border-slate-100">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-sm">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-800">บันทึกออเดอร์เรียบร้อยแล้ว!</h3>
+                <p class="text-xs text-slate-500 mt-0.5">ระบบพร้อมนำท่านไปยังแชตเพื่อยืนยันรายการ</p>
+            </div>
+            
+            <div class="space-y-2.5 text-xs text-left">
+                <!-- Info Alert 1: Open WhatsApp -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 text-emerald-800 font-medium leading-relaxed flex items-start gap-2.5 shadow-sm">
+                    <i class="fas fa-info-circle text-emerald-600 text-base mt-0.5 shrink-0"></i>
+                    <span>เมื่อกดปุ่มด้านล่าง ระบบจะเชื่อมต่อไปยังแชต <b>WhatsApp</b> ของทางร้านโดยอัตโนมัติ</span>
+                </div>
+
+                <!-- Info Alert 2: Friendly Warning for Address -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-amber-900 font-medium leading-relaxed flex items-start gap-2.5 shadow-sm">
+                    <i class="fas fa-exclamation-triangle text-amber-600 text-base mt-0.5 shrink-0"></i>
+                    <span>รบกวนตรวจสอบชื่อ เบอร์โทร และสาขาจัดส่งให้ถูกต้อง เพื่อป้องกันความผิดพลาดในการจัดส่งสินค้าครับ</span>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-1">
+                <a id="modal-whatsapp-link" href="#" target="_blank" onclick="closeActionModal()" class="block w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 text-sm transition">
+                    <i class="fab fa-whatsapp text-lg mr-1.5 align-middle"></i> เปิดแชต WhatsApp ตอนนี้
+                </a>
+                <button onclick="closeActionModal()" class="w-full text-xs text-slate-400 py-1.5 hover:text-slate-600 transition">
+                    ปิดหน้าต่างนี้
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-slate-900/90 text-white text-xs px-4 py-2.5 rounded-full shadow-2xl opacity-0 transition-opacity duration-300 pointer-events-none z-50 flex items-center gap-2 border border-slate-700">
+        <i id="toast-icon" class="fas fa-info-circle text-emerald-400"></i>
+        <span id="toast-msg">แจ้งเตือน</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const SHOP_NAME = "Millymill shop";
+        const WA_PHONE = "8562058844558";
+        
+        // Google Sheets Web App Endpoint
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwH23S0h5fn-qPJIQFkoE5IDZj08iyCW9jroJx-bgjjyyK46aO4I0Qmoporvc2_acRmXQ/exec';
+
+        // Products Data (10 Items)
+        let products = [
+            { id: 1, name: "ຂົນຕາ ເບີ4", price: 45000, image: "https://i.ibb.co/HD3Dch5y/BA91-F4-F1-0098-4-CE0-A51-B-73-CD4-F48-BC4-B.jpg", qty: 0 },
+            { id: 2, name: "ຂົນຕາ ເບີ5", price: 45000, image: "https://i.ibb.co/ks1M3Z3k/1-B1-D218-A-66-E7-4856-AC3-E-90523318-A94-D.jpg", qty: 0 },
+            { id: 3, name: "ຂົນຕາ ເບີ10", price: 45000, image: "https://i.ibb.co/8nHNSDxP/8-FB4-B4-B0-FD2-D-4-F42-96-EC-DF2268-A42-CCA.jpg", qty: 0 },
+            { id: 4, name: "ຂົນຕາ ເບີ23", price: 45000, image: "https://i.ibb.co/hFsB9zmK/E73-CBF27-4-A97-4821-A369-CF8-E2749-DC6-A.jpg", qty: 0 },
+          
+        ];
+
+        // Function to Send Data to Google Sheets
+        function sendOrderToGoogleSheet(orderObj) {
+            orderObj.items.forEach(item => {
+                const payload = {
+                    productName: item.name,
+                    quantity: item.qty,
+                    totalPrice: item.total,
+                    customerName: orderObj.customerName,
+                    phoneNumber: orderObj.customerPhone,
+                    courier: orderObj.transport,
+                    branch: orderObj.branch
+                };
+
+                fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                }).catch(error => console.error('Sheet Error:', error));
+            });
+        }
+
+        function formatKip(amount) {
+            return new Intl.NumberFormat('th-TH').format(amount) + " ₭";
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
+
+            let totalSelectedItems = 0;
+
+            products.forEach(p => {
+                const item = document.createElement('div');
+                const isSelected = p.qty > 0;
+                if (isSelected) totalSelectedItems += p.qty;
+
+                item.className = `p-3 rounded-2xl border transition flex items-center justify-between ${
+                    isSelected ? 'bg-emerald-50/70 border-emerald-300 shadow-sm' : 'bg-slate-50 border-slate-200'
+                }`;
+
+                const defaultImg = "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=300&q=80";
+                const imgSrc = p.image && p.image.trim() !== "" ? p.image : defaultImg;
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-3.5">
+                        <img src="${imgSrc}" onerror="this.src='${defaultImg}'" class="w-20 h-20 rounded-2xl object-cover border border-slate-200 shadow-sm shrink-0">
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-800 leading-snug">${p.name}</h3>
+                            <div class="mt-1">
+                                <span class="text-sm font-black text-emerald-600">${formatKip(p.price)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center gap-2 bg-white rounded-xl p-1.5 border border-slate-200 shadow-sm">
+                            <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-base flex items-center justify-center transition">-</button>
+                            <span class="w-6 text-center font-extrabold text-sm text-slate-800">${p.qty}</span>
+                            <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-90 text-white font-bold text-base flex items-center justify-center transition">+</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            document.getElementById('cart-item-count').innerText = `เลือกแล้ว ${totalSelectedItems} ชิ้น`;
+            calculateTotal();
+        }
+
+        function updateQty(id, change) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                product.qty = Math.max(0, product.qty + change);
+                renderProducts();
+            }
+        }
+
+        function resetCart() {
+            products.forEach(p => p.qty = 0);
+            renderProducts();
+            showToast("ล้างรายการสินค้าเรียบร้อยแล้ว", "fa-rotate-left");
+        }
+
+        function calculateTotal() {
+            const grandTotal = products.reduce((sum, p) => sum + (p.price * (p.qty || 0)), 0);
+            const formattedTotal = formatKip(grandTotal);
+
+            document.getElementById('grand-total-text').innerText = formattedTotal;
+            return grandTotal;
+        }
+
+        function submitOrder() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const transport = document.getElementById('transport-select').value;
+            const branch = document.getElementById('cust-branch').value.trim();
+
+            const selectedProducts = products.filter(p => p.qty > 0);
+            const grandTotal = calculateTotal();
+
+            if (selectedProducts.length === 0) {
+                showToast("กรุณาเลือกอย่างน้อย 1 รายการสินค้า", "fa-exclamation-triangle");
+                return;
+            }
+
+            if (!name || !phone || !branch) {
+                showToast("กรุณากรอกข้อมูลผู้รับและสาขาขนส่งให้ครบถ้วน", "fa-exclamation-triangle");
+                return;
+            }
+
+            const orderObj = {
+                customerName: name,
+                customerPhone: phone,
+                transport: transport,
+                branch: branch,
+                items: selectedProducts.map(p => ({
+                    name: p.name,
+                    price: p.price,
+                    qty: p.qty,
+                    total: p.price * p.qty
+                })),
+                totalAmount: grandTotal
+            };
+
+            // ส่งข้อมูลไปยัง Google Sheets
+            sendOrderToGoogleSheet(orderObj);
+
+            let itemsListText = "";
+            orderObj.items.forEach(item => {
+                itemsListText += `• ${item.name} (x${item.qty}) = ${formatKip(item.total)}\n`;
+            });
+
+            let waMsg = `🛒 *[แบบฟอร์มสั่งซื้อสินค้า - ${SHOP_NAME}]*\n`;
+            waMsg += `-----------------------------------\n`;
+            waMsg += `👤 *ผู้รับ:* ${orderObj.customerName}\n`;
+            waMsg += `📱 *เบอร์โทร:* ${orderObj.customerPhone}\n`;
+            waMsg += `🚚 *ขนส่ง:* ${orderObj.transport} (สาขา ${orderObj.branch})\n`;
+            waMsg += `-----------------------------------\n`;
+            waMsg += `📦 *รายการสินค้า:*\n${itemsListText}`;
+            waMsg += `-----------------------------------\n`;
+            waMsg += `💰 *ยอดรวมทั้งสิ้น:* *${formatKip(orderObj.totalAmount)}*\n\n`;
+            waMsg += `⚠️ *(กรุณาส่งรูปสลิป/แคปหน้าจอโอนเงินยืนยันในแชตนี้ เพื่อให้ทางร้านจัดส่งสินค้าครับ)*`;
+
+            copyTextToClipboard(waMsg);
+
+            const encodedWaUrl = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(waMsg)}`;
+            document.getElementById('modal-whatsapp-link').href = encodedWaUrl;
+            document.getElementById('action-modal').classList.remove('hidden');
+
+            // Reset Form
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-branch').value = '';
+            products.forEach(p => p.qty = 0);
+            renderProducts();
+        }
+
+        function copyTextToClipboard(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Fallback copy failed', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function closeActionModal() {
+            document.getElementById('action-modal').classList.add('hidden');
+        }
+
+        function showToast(msg, icon = "fa-info-circle") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = msg;
+            toastIcon.className = `fas ${icon} text-emerald-400`;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        window.onload = function() {
+            renderProducts();
+        };
+    </script>
+</body>
+</html>
