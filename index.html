@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Millymill shop - แบบฟอร์มสั่งซื้อสินค้า</title>
+    <title>Millymill Shop - แบบฟอร์มสั่งซื้อสินค้า</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -17,7 +17,6 @@
             font-family: 'Kanit', 'Noto Sans Lao', sans-serif;
             background-color: #f8fafc;
         }
-        /* บังคับขนาดตัวอักษร input, select, textarea ให้มีความใหญ่ขั้นต่ำ 16px */
         input, select, textarea {
             font-size: 16px !important;
         }
@@ -52,7 +51,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg leading-tight tracking-wide flex items-center gap-1.5">
-                        Millymill shop
+                        Millymill Shop
                     </h1>
                     <p class="text-xs text-emerald-100 font-light">สั่งซื้อง่าย ส่งไว ได้ของชัวร์</p>
                 </div>
@@ -71,7 +70,7 @@
             <div class="bg-emerald-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
                 <i class="fas fa-store text-base"></i>
             </div>
-            <p class="leading-relaxed">ยินดีต้อนรับสู่ <b class="text-emerald-700">Millymill shop</b> เลือกสินค้า และกรอกข้อมูลจัดส่งด้านล่างเพื่อสั่งซื้อได้ทันทีครับ</p>
+            <p class="leading-relaxed">ยินดีต้อนรับสู่ <b class="text-emerald-700">Millymill Shop</b> เลือกสินค้า และกรอกข้อมูลจัดส่งด้านล่างเพื่อสั่งซื้อได้ทันทีครับ</p>
         </div>
 
         <!-- Step 1: Select Products -->
@@ -90,7 +89,10 @@
 
             <!-- Product List Grid -->
             <div id="product-list" class="space-y-3">
-                <!-- Products rendered dynamically -->
+                <div class="text-center py-6 text-slate-400 text-sm">
+                    <i class="fas fa-spinner fa-spin text-emerald-600 text-xl mb-2"></i>
+                    <p>กำลังโหลดข้อมูลสต็อกล่าสุด...</p>
+                </div>
             </div>
         </section>
 
@@ -154,17 +156,16 @@
             <!-- Full-width QR Code Box -->
             <div class="bg-slate-50 p-4 rounded-2xl text-center border border-slate-200 mb-3">
                 <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 w-full max-w-xs mx-auto">
-                    <img id="qr-code-img" src="https://i.ibb.co/nNpM2QgW/C68-CA38-C-F810-44-A1-BC64-7-A5745021-F14.jpg" alt="BCEL OnePay QR Code" class="w-full h-auto mx-auto rounded-xl object-contain shadow-sm">
-                    <p class="text-xs text-slate-600 mt-2 font-bold">บัญชีผู้รับ: ⭐ Millymill shop ⭐</p>
+                    <img id="qr-code-img" src="https://i.ibb.co/nNpM2QgW/C68-CA38-C-F810-44-A1-BC64-7-A5745021-F14.jpg">
+                    <p class="text-xs text-slate-600 mt-2 font-bold">บัญชีผู้รับ: ⭐ Millymill Shop ⭐</p>
                 </div>
             </div>
 
-            <!-- Warning Notice Message -->
             <div class="bg-amber-50/90 border border-amber-300 rounded-2xl p-3.5 text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm">
                 <i class="fas fa-exclamation-triangle text-amber-500 text-base mt-0.5 shrink-0"></i>
                 <div class="text-slate-800">
-                    <span class="text-amber-700 font-bold">ถ้าลูกค้าเลือกสินค้าครบแล้วกรุณาสแกนจ่ายตามยอดรวมจำนวนเงินลูกค้าชำระแล้ว </span>
-                    <span class="text-rose-600 font-extrabold">กรุณาบันทึกหรือแคปสลิปการโอนไว้ถ้าไม่มีสลิปการโอนเราจะไม่จัดส่งสินค้าเด็ดขาด</span>
+                    <span class="text-amber-700 font-bold">ถ้าลูกค้าเลือกสินค้าครบแล้วกรุณาสแกนจ่ายตามยอดรวมจำนวนเงิน ถ้าลูกค้าชำระเงินแล้ว </span>
+                    <span class="text-rose-600 font-extrabold">กรุณาบันทึก หรือ แคปสลิปการโอนไว้ ถ้าไม่มีสลิปการโอนเราจะไม่จัดส่งสินค้าเด็ดขาดเมื่อเข้าไปในwhatsappแล้วกรุณาสงสลิปการโอนเงีนให้ทาง admin เพื่อตรวจสอบ</span>
                 </div>
             </div>
         </section>
@@ -181,7 +182,7 @@
 
         <!-- Submit & Actions -->
         <div class="space-y-2 pt-1">
-            <button onclick="submitOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2.5 text-base transition transform active:scale-[0.98]">
+            <button id="btn-submit" onclick="submitOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2.5 text-base transition transform active:scale-[0.98]">
                 <i class="fab fa-whatsapp text-2xl"></i>
                 <span>ส่งข้อมูลให้ร้านค้าเพื่อจัดส่ง</span>
             </button>
@@ -189,7 +190,7 @@
 
     </main>
 
-    <!-- WhatsApp Redirect Instruction Modal -->
+    <!-- Modal -->
     <div id="action-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-5 max-w-sm w-full text-center space-y-4 animate-pop shadow-2xl border border-slate-100">
             <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-sm">
@@ -201,13 +202,11 @@
             </div>
             
             <div class="space-y-2.5 text-xs text-left">
-                <!-- Info Alert 1: Open WhatsApp -->
                 <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 text-emerald-800 font-medium leading-relaxed flex items-start gap-2.5 shadow-sm">
                     <i class="fas fa-info-circle text-emerald-600 text-base mt-0.5 shrink-0"></i>
                     <span>เมื่อกดปุ่มด้านล่าง ระบบจะเชื่อมต่อไปยังแชต <b>WhatsApp</b> ของทางร้านโดยอัตโนมัติ</span>
                 </div>
 
-                <!-- Info Alert 2: Friendly Warning for Address -->
                 <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 text-amber-900 font-medium leading-relaxed flex items-start gap-2.5 shadow-sm">
                     <i class="fas fa-exclamation-triangle text-amber-600 text-base mt-0.5 shrink-0"></i>
                     <span>รบกวนตรวจสอบชื่อ เบอร์โทร และสาขาจัดส่งให้ถูกต้อง เพื่อป้องกันความผิดพลาดในการจัดส่งสินค้าครับ</span>
@@ -233,49 +232,52 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const SHOP_NAME = "Millymill shop";
+        const SHOP_NAME = "Millymill Shop";
         const WA_PHONE = "8562058844558";
         
-        // Google Sheets Web App Endpoint
-        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwH23S0h5fn-qPJIQFkoE5IDZj08iyCW9jroJx-bgjjyyK46aO4I0Qmoporvc2_acRmXQ/exec';
+        // ** ใส่ Web App URL ของคุณเรียบร้อยแล้ว **
+        const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbx-dlxhu9PTV-6AD9lNc2XWeNu6pkLfMAzlcUjuv49DZrke7cOPK19zU-WpbFMj-MZVbQ/exec';
 
-        // Products Data (10 Items)
+        // สินค้าเริ่มต้น
         let products = [
-            { id: 1, name: "ຂົນຕາ ເບີ4", price: 45000, image: "https://i.ibb.co/HD3Dch5y/BA91-F4-F1-0098-4-CE0-A51-B-73-CD4-F48-BC4-B.jpg", qty: 0 },
-            { id: 2, name: "ຂົນຕາ ເບີ5", price: 45000, image: "https://i.ibb.co/ks1M3Z3k/1-B1-D218-A-66-E7-4856-AC3-E-90523318-A94-D.jpg", qty: 0 },
-            { id: 3, name: "ຂົນຕາ ເບີ10", price: 45000, image: "https://i.ibb.co/8nHNSDxP/8-FB4-B4-B0-FD2-D-4-F42-96-EC-DF2268-A42-CCA.jpg", qty: 0 },
-            { id: 4, name: "ຂົນຕາ ເບີ23", price: 45000, image: "https://i.ibb.co/hFsB9zmK/E73-CBF27-4-A97-4821-A369-CF8-E2749-DC6-A.jpg", qty: 0 },
-          
+            { id: 1, name: "ขนตา เบื4", price: 45000, image: "https://i.ibb.co/HD3Dch5y/BA91-F4-F1-0098-4-CE0-A51-B-73-CD4-F48-BC4-B.jpg", qty: 0, stock: 0 },
+            { id: 2, name: "ขนตา เบื5", price: 45000, image: "https://i.ibb.co/ks1M3Z3k/1-B1-D218-A-66-E7-4856-AC3-E-90523318-A94-D.jpg", qty: 0, stock: 0 },
+            { id: 3, name: "ขนตา เบื10", price: 45000, image: "https://i.ibb.co/8nHNSDxP/8-FB4-B4-B0-FD2-D-4-F42-96-EC-DF2268-A42-CCA.jpg", qty: 0, stock: 0 },
+            { id: 4, name: "ขนตา เบื23", price: 45000, image: "https://i.ibb.co/hFsB9zmK/E73-CBF27-4-A97-4821-A369-CF8-E2749-DC6-A.jpg", qty: 0, stock: 0 },
+            { id: 5, name: "สะคับ ใหย่", price: 89000, image: "https://i.ibb.co/TqYtvSWd/99-E71-DB3-66-D1-46-D3-816-C-BD19-E61-D384-B.jpg", qty: 0, stock: 0 },
+            { id: 6, name: "สะคับ น้อย", price: 15000, image: "https://i.ibb.co/Xx2W7ghV/998487-CB-F30-A-4-B31-84-D5-067-BF1-E6268-D.jpg", qty: 0, stock: 0 },
+            { id: 7, name: "สะคับ ใหย่ 1 แภม 1", price: 155000, image: "https://i.ibb.co/TqYtvSWd/99-E71-DB3-66-D1-46-D3-816-C-BD19-E61-D384-B.jpg", qty: 0, stock: 0 },
+
         ];
 
-        // Function to Send Data to Google Sheets
-        function sendOrderToGoogleSheet(orderObj) {
-            orderObj.items.forEach(item => {
-                const payload = {
-                    productName: item.name,
-                    quantity: item.qty,
-                    totalPrice: item.total,
-                    customerName: orderObj.customerName,
-                    phoneNumber: orderObj.customerPhone,
-                    courier: orderObj.transport,
-                    branch: orderObj.branch
-                };
+        // 1. ดึงข้อมูลสต็อกสินค้าล่าสุดมาจาก Google Sheets
+        async function fetchStockFromSheet() {
+            try {
+                const response = await fetch(GOOGLE_SHEET_URL);
+                const result = await response.json();
 
-                fetch(GOOGLE_SHEET_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                }).catch(error => console.error('Sheet Error:', error));
-            });
+                if (result.status === "success" && result.products) {
+                    result.products.forEach(sheetItem => {
+                        const localProd = products.find(p => p.id === sheetItem.id);
+                        if (localProd) {
+                            localProd.stock = sheetItem.stock;
+                            if (sheetItem.price) localProd.price = sheetItem.price;
+                            if (sheetItem.name) localProd.name = sheetItem.name;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching stock:", error);
+            } finally {
+                renderProducts();
+            }
         }
 
         function formatKip(amount) {
             return new Intl.NumberFormat('th-TH').format(amount) + " ₭";
         }
 
+        // 2. แสดงผลรายการสินค้าพร้อมตัวเลขสต็อกคงเหลือ
         function renderProducts() {
             const container = document.getElementById('product-list');
             container.innerHTML = '';
@@ -287,29 +289,39 @@
                 const isSelected = p.qty > 0;
                 if (isSelected) totalSelectedItems += p.qty;
 
+                const isOutOfStock = p.stock <= 0;
+
                 item.className = `p-3 rounded-2xl border transition flex items-center justify-between ${
-                    isSelected ? 'bg-emerald-50/70 border-emerald-300 shadow-sm' : 'bg-slate-50 border-slate-200'
+                    isOutOfStock ? 'bg-slate-100/80 border-slate-200 opacity-60' : (isSelected ? 'bg-emerald-50/70 border-emerald-300 shadow-sm' : 'bg-slate-50 border-slate-200')
                 }`;
 
                 const defaultImg = "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=300&q=80";
                 const imgSrc = p.image && p.image.trim() !== "" ? p.image : defaultImg;
+
+                let stockBadge = `<span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md">คงเหลือ ${p.stock} ชิ้น</span>`;
+                if (isOutOfStock) {
+                    stockBadge = `<span class="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-md">สินค้าหมด</span>`;
+                }
 
                 item.innerHTML = `
                     <div class="flex items-center gap-3.5">
                         <img src="${imgSrc}" onerror="this.src='${defaultImg}'" class="w-20 h-20 rounded-2xl object-cover border border-slate-200 shadow-sm shrink-0">
                         <div>
                             <h3 class="font-bold text-sm text-slate-800 leading-snug">${p.name}</h3>
-                            <div class="mt-1">
+                            <div class="mt-1 flex items-center gap-2">
                                 <span class="text-sm font-black text-emerald-600">${formatKip(p.price)}</span>
+                            </div>
+                            <div class="mt-1">
+                                ${stockBadge}
                             </div>
                         </div>
                     </div>
                     
                     <div>
                         <div class="flex items-center gap-2 bg-white rounded-xl p-1.5 border border-slate-200 shadow-sm">
-                            <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-base flex items-center justify-center transition">-</button>
+                            <button onclick="updateQty(${p.id}, -1)" ${isOutOfStock ? 'disabled' : ''} class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-700 font-bold text-base flex items-center justify-center transition disabled:opacity-30">-</button>
                             <span class="w-6 text-center font-extrabold text-sm text-slate-800">${p.qty}</span>
-                            <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-90 text-white font-bold text-base flex items-center justify-center transition">+</button>
+                            <button onclick="updateQty(${p.id}, 1)" ${isOutOfStock ? 'disabled' : ''} class="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:scale-90 text-white font-bold text-base flex items-center justify-center transition disabled:opacity-30">+</button>
                         </div>
                     </div>
                 `;
@@ -323,6 +335,10 @@
         function updateQty(id, change) {
             const product = products.find(p => p.id === id);
             if (product) {
+                if (change > 0 && product.qty + change > product.stock) {
+                    showToast(`สินค้าชิ้นนี้เหลือในสต็อกเพียง ${product.stock} ชิ้น`, "fa-exclamation-triangle");
+                    return;
+                }
                 product.qty = Math.max(0, product.qty + change);
                 renderProducts();
             }
@@ -342,7 +358,8 @@
             return grandTotal;
         }
 
-        function submitOrder() {
+        // 3. ส่งข้อมูลตัดสต็อกไปที่ Google Sheets และอัปเดตหน้าเว็บทันที
+        async function submitOrder() {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
             const transport = document.getElementById('transport-select').value;
@@ -361,37 +378,60 @@
                 return;
             }
 
-            const orderObj = {
-                customerName: name,
-                customerPhone: phone,
-                transport: transport,
-                branch: branch,
-                items: selectedProducts.map(p => ({
-                    name: p.name,
-                    price: p.price,
-                    qty: p.qty,
-                    total: p.price * p.qty
-                })),
-                totalAmount: grandTotal
-            };
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<i class="fas fa-spinner fa-spin text-xl"></i> <span>กำลังบันทึกและตัดสต็อก...</span>`;
 
-            // ส่งข้อมูลไปยัง Google Sheets
-            sendOrderToGoogleSheet(orderObj);
+            // ส่งข้อมูลสั่งซื้อตัดสต็อกทีละรายการ
+            for (const item of selectedProducts) {
+                const payload = {
+                    product_id: item.id,
+                    product_name: item.name,
+                    quantity: item.qty,
+                    total_price: item.price * item.qty,
+                    customer_name: name,
+                    phone: phone,
+                    express_company: transport,
+                    branch: branch
+                };
+
+                try {
+                    const response = await fetch(GOOGLE_SHEET_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(payload)
+                    });
+                    const resJson = await response.json();
+                    
+                    if (resJson.status === "out_of_stock") {
+                        showToast(resJson.message, "fa-exclamation-triangle");
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerHTML = `<i class="fab fa-whatsapp text-2xl"></i> <span>ส่งข้อมูลให้ร้านค้าเพื่อจัดส่ง</span>`;
+                        fetchStockFromSheet();
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Error submitting order:", err);
+                }
+            }
+
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = `<i class="fab fa-whatsapp text-2xl"></i> <span>ส่งข้อมูลให้ร้านค้าเพื่อจัดส่ง</span>`;
 
             let itemsListText = "";
-            orderObj.items.forEach(item => {
-                itemsListText += `• ${item.name} (x${item.qty}) = ${formatKip(item.total)}\n`;
+            selectedProducts.forEach(item => {
+                itemsListText += `• ${item.name} (x${item.qty}) = ${formatKip(item.price * item.qty)}\n`;
             });
 
             let waMsg = `🛒 *[แบบฟอร์มสั่งซื้อสินค้า - ${SHOP_NAME}]*\n`;
             waMsg += `-----------------------------------\n`;
-            waMsg += `👤 *ผู้รับ:* ${orderObj.customerName}\n`;
-            waMsg += `📱 *เบอร์โทร:* ${orderObj.customerPhone}\n`;
-            waMsg += `🚚 *ขนส่ง:* ${orderObj.transport} (สาขา ${orderObj.branch})\n`;
+            waMsg += `👤 *ผู้รับ:* ${name}\n`;
+            waMsg += `📱 *เบอร์โทร:* ${phone}\n`;
+            waMsg += `🚚 *ขนส่ง:* ${transport} (สาขา ${branch})\n`;
             waMsg += `-----------------------------------\n`;
             waMsg += `📦 *รายการสินค้า:*\n${itemsListText}`;
             waMsg += `-----------------------------------\n`;
-            waMsg += `💰 *ยอดรวมทั้งสิ้น:* *${formatKip(orderObj.totalAmount)}*\n\n`;
+            waMsg += `💰 *ยอดรวมทั้งสิ้น:* *${formatKip(grandTotal)}*\n\n`;
             waMsg += `⚠️ *(กรุณาส่งรูปสลิป/แคปหน้าจอโอนเงินยืนยันในแชตนี้ เพื่อให้ทางร้านจัดส่งสินค้าครับ)*`;
 
             copyTextToClipboard(waMsg);
@@ -400,12 +440,12 @@
             document.getElementById('modal-whatsapp-link').href = encodedWaUrl;
             document.getElementById('action-modal').classList.remove('hidden');
 
-            // Reset Form
             document.getElementById('cust-name').value = '';
             document.getElementById('cust-phone').value = '';
             document.getElementById('cust-branch').value = '';
             products.forEach(p => p.qty = 0);
-            renderProducts();
+            
+            fetchStockFromSheet();
         }
 
         function copyTextToClipboard(text) {
@@ -444,7 +484,7 @@
         }
 
         window.onload = function() {
-            renderProducts();
+            fetchStockFromSheet();
         };
     </script>
 </body>
